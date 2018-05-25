@@ -1,4 +1,6 @@
-# ops-log
+# fsjl
+
+**F**ormat **S**tructured **J**SON **L**ogs
 
 Orthogonal, opinionated JSON log transformer.
 
@@ -6,10 +8,10 @@ For https://docs.kofile.systems/dev-docs/microservices/good-citizenship-for-serv
 
 ### Usage
 
-[Pipe in JSON log output](https://getpino.io/#/) to `ops-log`:
+[Pipe in JSON log output](https://getpino.io/#/) to `fsjl`:
 
 ```sh
-node run-server.js | ops-log
+node run-server.js | fsjl
 ```
 
 ... will transform the server logs from stdout ...
@@ -42,7 +44,7 @@ node run-server.js | ops-log
 ##### Example of `-no-color`
 
 ```sh
-$ node run-server.js | ops-log -no-color
+$ node run-server.js | fsjl -no-color
 ```
 
 <img width="1387" alt="screen shot 2018-05-07 at 4 13 27 pm" src="https://user-images.githubusercontent.com/29997/39729586-9b250308-5211-11e8-8511-52c92adfd64a.png">
@@ -50,7 +52,7 @@ $ node run-server.js | ops-log -no-color
 ##### Example of `-fall-through`
 
 ```sh
-$ node run-server.js | ops-log -fall-through
+$ node run-server.js | fsjl -fall-through
 ```
 
 <img width="1380" alt="screen shot 2018-05-07 at 4 15 30 pm" src="https://user-images.githubusercontent.com/29997/39729654-e61fd3b0-5211-11e8-80a1-1cf9a5bf7b9c.png">
@@ -58,7 +60,7 @@ $ node run-server.js | ops-log -fall-through
 ##### Example of `-ignore-all-meta`
 
 ```sh
-$ node run-server.js | ops-log -ignore-all-meta
+$ node run-server.js | fsjl -ignore-all-meta
 ```
 
 <img width="1053" alt="screen shot 2018-05-07 at 4 16 05 pm" src="https://user-images.githubusercontent.com/29997/39729668-f7c477f6-5211-11e8-9164-164248d48219.png">
