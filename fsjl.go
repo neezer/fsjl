@@ -10,6 +10,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -18,6 +19,7 @@ import (
 )
 
 var red = color.New(color.FgRed).SprintfFunc()
+var magenta = color.New(color.FgMagenta).SprintfFunc()
 var green = color.New(color.FgGreen).SprintfFunc()
 var yellow = color.New(color.FgYellow).SprintfFunc()
 var white = color.New(color.FgWhite).SprintfFunc()
@@ -26,6 +28,7 @@ var black = color.New(color.FgHiBlack).SprintfFunc()
 type loglevel int
 
 const (
+	logFatal loglevel = 60
 	logError loglevel = 50
 	logWarn  loglevel = 40
 	logInfo  loglevel = 30
@@ -64,10 +67,30 @@ func main() {
 		line, err := formatLogLine(scanner.Text(), flagIgnoreAllMeta)
 
 		if err == nil {
-			fmt.Println(line)
+			if *flagNoColor {
+				strippedLine, err := stripANSI(line)
+
+				if err == nil {
+					fmt.Println(strippedLine)
+				} else {
+					fmt.Println(line)
+				}
+			} else {
+				fmt.Println(line)
+			}
 		} else {
 			if *flagFallThrough {
-				fmt.Println(scanner.Text())
+				if *flagNoColor {
+					strippedLine, err := stripANSI(scanner.Text())
+
+					if err == nil {
+						fmt.Println(strippedLine)
+					} else {
+						fmt.Println(scanner.Text())
+					}
+				} else {
+					fmt.Println(scanner.Text())
+				}
 			}
 		}
 	}
@@ -112,6 +135,9 @@ func formatLogLine(logLine string, flagIgnoreAllMeta *bool) (string, error) {
 			levelRaw := loglevel(v.(float64))
 
 			switch levelRaw {
+			case logFatal:
+				level = "FATAL"
+				color = magenta
 			case logError:
 				level = "ERROR"
 				color = red
@@ -177,4 +203,14 @@ func msToTime(ms string) (time.Time, error) {
 	}
 
 	return time.Unix(0, msInt*int64(time.Millisecond)), nil
+}
+
+func stripANSI(message string) (string, error) {
+	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
+
+	if err != nil {
+		return "", err
+	}
+
+	return reg.ReplaceAllString(message, ""), nil
 }
